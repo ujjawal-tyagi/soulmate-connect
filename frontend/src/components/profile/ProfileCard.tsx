@@ -96,14 +96,7 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike, className }:
               <h2 className="text-2xl font-display font-bold text-white">
                 {profile.name}, {profile.age}
               </h2>
-              {/* Tyagi Community Identifiers */}
-              {(profile.gotra || profile.native_village) && (
-                <div className="flex items-center gap-2 text-primary/90 mt-1 text-sm font-medium">
-                  {profile.gotra && <span>{profile.gotra} Gotra</span>}
-                  {profile.gotra && profile.native_village && <span>•</span>}
-                  {profile.native_village && <span>{profile.native_village}</span>}
-                </div>
-              )}
+
               <div className="flex items-center gap-2 text-white/80 mt-1">
                 <MapPin className="w-4 h-4" />
                 <span className="text-sm">{getLocationString(profile.location)}</span>
@@ -146,9 +139,14 @@ export function ProfileCard({ profile, onLike, onPass, onSuperLike, className }:
                 Manglik: {profile.manglik_status === 'dont_know' ? "Don't Know" : profile.manglik_status.charAt(0).toUpperCase() + profile.manglik_status.slice(1)}
               </Badge>
             )}
-            {profile.sub_caste && (
+            {profile.gotra && (
               <Badge variant="secondary" className="glass-card border-white/10">
-                {profile.sub_caste}
+                {profile.gotra} Gotra
+              </Badge>
+            )}
+            {profile.native_village && (
+              <Badge variant="secondary" className="glass-card border-white/10 text-primary">
+                {profile.native_village}
               </Badge>
             )}
           </div>

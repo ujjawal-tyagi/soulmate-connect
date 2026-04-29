@@ -342,4 +342,21 @@ async def unmatch(
         {"$set": {"is_active": False}}
     )
     
+    # Enable profile to appear in search again
+    # 1. Delete associated swipes between these two users
+    await db.swipes.delete_many({
+        "$or": [
+            {"user_id": match["user1_id"], "target_user_id": match["user2_id"]},
+            {"user_id": match["user2_id"], "target_user_id": match["user1_id"]}
+        ]
+    })
+    
+    # 2. Delete associated match requests between these two users
+    await db.match_requests.delete_many({
+        "$or": [
+            {"from_user_id": match["user1_id"], "to_user_id": match["user2_id"]},
+            {"from_user_id": match["user2_id"], "to_user_id": match["user1_id"]}
+        ]
+    })
+    
     return {"message": "Successfully unmatched"}

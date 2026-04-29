@@ -16,11 +16,7 @@ const GOTRA_OPTIONS = [
     'Garg', 'Vatsa', 'Shandilya', 'Mudgal', 'Other'
 ];
 
-// Sub-caste options
-const SUB_CASTE_OPTIONS = [
-    'Barhsena Tyagi', 'Chaumukha Tyagi', 'Dauhar Tyagi',
-    'Baliyan Tyagi', 'Khaga Tyagi', 'Other'
-];
+
 
 // Manglik options
 const MANGLIK_OPTIONS = [
@@ -47,7 +43,6 @@ export default function ProfileEdit() {
         state: '',
         // Community Details (Tyagi)
         gotra: '',
-        subCaste: '',
         nativeVillage: '',
         manglikStatus: '',
         // Family Details
@@ -74,7 +69,6 @@ export default function ProfileEdit() {
                     city: data.location?.city || '',
                     state: data.location?.state || '',
                     gotra: data.gotra || '',
-                    subCaste: data.sub_caste || '',
                     nativeVillage: data.native_village || '',
                     manglikStatus: data.manglik_status || '',
                     fatherName: data.family_details?.father_name || '',
@@ -110,7 +104,6 @@ export default function ProfileEdit() {
                     country: 'India'
                 } : undefined,
                 gotra: formData.gotra || undefined,
-                sub_caste: formData.subCaste || undefined,
                 native_village: formData.nativeVillage || undefined,
                 manglik_status: formData.manglikStatus || undefined,
                 family_details: (formData.fatherName || formData.motherName) ? {
@@ -273,24 +266,7 @@ export default function ProfileEdit() {
                             <p className="text-xs text-muted-foreground mt-1">Important for matching</p>
                         </div>
 
-                        <div>
-                            <Label>Sub-caste</Label>
-                            <Select
-                                value={formData.subCaste}
-                                onValueChange={(value) => setFormData({ ...formData, subCaste: value })}
-                            >
-                                <SelectTrigger className="glass-card border-white/10 h-12 rounded-xl mt-1">
-                                    <SelectValue placeholder="Select sub-caste" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {SUB_CASTE_OPTIONS.map((caste) => (
-                                        <SelectItem key={caste} value={caste}>
-                                            {caste}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        </div>
+
 
                         <div>
                             <Label>Native Village (Gaon)</Label>
@@ -381,6 +357,67 @@ export default function ProfileEdit() {
                                     <SelectItem value="nuclear">Nuclear Family</SelectItem>
                                 </SelectContent>
                             </Select>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Interests Section */}
+                <div className="glass-card rounded-2xl p-4">
+                    <h3 className="font-semibold mb-4">Interests</h3>
+                    <div className="space-y-4">
+                        <div className="flex gap-2">
+                            <Input
+                                placeholder="Add an interest (e.g., Reading, Travel)"
+                                className="glass-card border-white/10 h-12 rounded-xl flex-1"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        const input = e.currentTarget;
+                                        const value = input.value.trim();
+                                        if (value && !formData.interests.includes(value)) {
+                                            setFormData(prev => ({ ...prev, interests: [...prev.interests, value] }));
+                                            input.value = '';
+                                        }
+                                    }
+                                }}
+                            />
+                            <Button
+                                variant="outline"
+                                className="h-12"
+                                onClick={(e) => {
+                                    const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                                    const value = input.value.trim();
+                                    if (value && !formData.interests.includes(value)) {
+                                        setFormData(prev => ({ ...prev, interests: [...prev.interests, value] }));
+                                        input.value = '';
+                                    }
+                                }}
+                            >
+                                Add
+                            </Button>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                            {formData.interests.map((interest, index) => (
+                                <span
+                                    key={index}
+                                    className="bg-primary/20 text-primary px-3 py-1.5 rounded-full text-sm flex items-center gap-2 group border border-primary/20"
+                                >
+                                    {interest}
+                                    <button
+                                        onClick={() => setFormData(prev => ({
+                                            ...prev,
+                                            interests: prev.interests.filter((_, i) => i !== index)
+                                        }))}
+                                        className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-primary/40 text-primary opacity-70 hover:opacity-100 transition-all font-bold"
+                                        aria-label="Remove interest"
+                                    >
+                                        ×
+                                    </button>
+                                </span>
+                            ))}
+                            {formData.interests.length === 0 && (
+                                <p className="text-sm text-muted-foreground w-full text-center py-2">No interests added yet</p>
+                            )}
                         </div>
                     </div>
                 </div>

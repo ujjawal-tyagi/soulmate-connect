@@ -184,7 +184,7 @@ export default function Profile() {
             )}
             <div className="flex items-center justify-center gap-1 text-muted-foreground text-sm mt-1">
               <MapPin className="w-4 h-4" />
-              <span>{user.native_village || user.location}</span>
+              <span>{user.location}</span>
             </div>
           </div>
         </div>
@@ -233,7 +233,7 @@ export default function Profile() {
         )}
 
         {/* Tyagi Community Details */}
-        {(user.gotra || user.sub_caste || user.native_village || user.manglik_status) && (
+        {(user.gotra || user.native_village || user.manglik_status) && (
           <div className="glass-card rounded-2xl p-4 mb-6">
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-semibold">Community Details</h3>
@@ -250,12 +250,7 @@ export default function Profile() {
                   <p className="font-medium">{user.gotra}</p>
                 </div>
               )}
-              {user.sub_caste && (
-                <div>
-                  <span className="text-muted-foreground text-xs">Sub-caste</span>
-                  <p className="font-medium">{user.sub_caste}</p>
-                </div>
-              )}
+
               {user.native_village && (
                 <div>
                   <span className="text-muted-foreground text-xs">Native Village</span>
